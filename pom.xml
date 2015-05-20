@@ -37,6 +37,8 @@
     <selenium.plugin.version>2.3</selenium.plugin.version>
     <maven.surefire.version>2.16</maven.surefire.version>
     <metrics.version>3.0.2</metrics.version>
+    <jacoco.plugin.version>0.7.2.201409121644</jacoco.plugin.version>
+    <coveralls.plugin.version>3.1.0</coveralls.plugin.version>
   </properties>
 
   <dependencyManagement>
@@ -225,9 +227,14 @@
         <version>${maven.surefire.version}</version>
       </plugin>
       <plugin>
+        <groupId>org.eluder.coveralls</groupId>
+        <artifactId>coveralls-maven-plugin</artifactId>
+        <version>${coveralls.plugin.version}</version>
+      </plugin>
+      <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
-        <version>0.7.2.201409121644</version>
+        <version>${jacoco.plugin.version}</version>
         <executions>
           <execution>
             <id>prepare-agent</id>
