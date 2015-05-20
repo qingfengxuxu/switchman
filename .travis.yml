@@ -5,4 +5,7 @@ before_install:
   - "export DISPLAY=:1200"
   - "sh -e /etc/init.d/xvfb start"
   - sleep 3 # give xvfb some time to start
-script: mvn verify -Pheadless
+script:
+  - mvn verify -Pheadless
+after_success:
+  - mvn clean test -Pheadless jacoco:report coveralls:report
