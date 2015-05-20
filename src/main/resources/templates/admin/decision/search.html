@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorator="root">
+<body>
+<div layout:fragment="content" class="container" style="margin-top: 30px">
+    <div class="col-md-6 col-md-offset-3">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><strong>AB Test Decisions- Search</strong></h3>
+            </div>
+            <div class="panel-body">
+                <form name="searchForm" th:action="@{decisions}">
+                    <label for="userSsoId">User SsoId:</label>
+                    <input type="text" name="userSsoId" id="userSsoId"/>
+                    <button type="submit" class="btn btn-xs btn-primary">Search</button>
+                </form>
+            </div>
+        </div>
+      
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title"><strong>AB Test Decisions- Upload</strong></h3>
+          </div>
+          <div class="panel-body">
+            You may upload CSV files with format: <br/> 
+            TEST-NAME;SSO-ID;VARIANTE
+            <form action="upload" th:action="@{/decisionsUpload}" method="post" enctype="multipart/form-data">
+              <input type="file" class="btn pull-left" name="decisions" />
+              <button type="submit" class="btn btn-xs btn-primary pull-right">Upload</button>
+            </form>
+          </div>
+        </div>
+        <div>
+            <a href="#" th:href="@{~/}">Return to Overview</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

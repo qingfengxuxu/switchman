@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<body>
+
+<div id="footer" th:fragment="imprint">
+    <div class="container">
+        <div class="pull-right footer">
+            <div sec:authorize="isAuthenticated()">
+                <form th:action="@{/logout}" method="post">
+                    Welcome: <span sec:authentication="name">User</span>
+                    <button class="btn btn-xs btn-default" type="submit">Logout</button>
+                </form>
+            </div>
+            <div sec:authorize="isAnonymous()">
+                <a href="#" th:href="@{/login}">Login</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

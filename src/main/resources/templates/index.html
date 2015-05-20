@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org" layout:decorator="root">
+<head>
+    <title>A/B Test Service - Login</title>
+</head>
+<body>
+<div layout:fragment="content" class="container" style="margin-top: 30px">
+    <div class="page-header">
+        <h1 class="centered"><span class="glyphicon glyphicon-random"></span>&nbsp;A/B Test Microservice</h1>
+    </div>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <p>Configuration and REST API for (cross-module) A/B tests.</p>
+        </div>
+        <div class="panel-body">
+            <p>The test configurations can be modified via the web user interface and the  REST-API. When using the API test descisions can be stored and retrieved.</p>
+
+            <p>When you like to call the REST Interface you will need credentials that must be passes via HTTP Basic Authentication!</p>
+        </div>
+        <div class="panel-footer">
+            <strong>Links</strong>
+            <ul>
+                <li><a id="configurations" href="#" th:href="@{/admin/configurations/}">Manage A/B Test Configurations</a></li>
+                <li><a id="decisions" href="#" th:href="@{/admin/decisions/}">Manage A/B Test Decisions for users</a></li>
+                <li><a id="togglz-manage" href="#" th:href="@{/admin/togglz/}">Manage Togglz Features</a></li>
+                <li><a id="togglz-console" href="#" th:href="@{/admin/togglz-console/}">Togglz Console</a></li>
+                <li><a href="#" th:href="@{/hal-browser/browser.html#/api}">Browse the REST API</a> (Please add basic auth header!)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html> 

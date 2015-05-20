@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org" layout:decorator="root">
+<head>
+    <title>Ab Test Service - Error</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="page-header">
+        <h1>Oops. Something went wrong!</h1>
+    </div>
+    <div class="alert alert-danger" th:if="${status} == '403'">
+        <form th:action="@{/logout}" method="post">
+        <strong>Zugriff verweigert!</strong>
+        <span>Sie benötigen erweiterte Zugriffsrechte. Wollen Sie sich<button class="btn btn-link">erneut anmelden</button>?</span>
+        </form>
+    </div>
+    <div class="alert alert-danger" th:if="${status} == '404'">
+        <strong>Seite nicht gefunden!</strong>
+    </div>
+    <div class="alert alert-danger" th:unless="${#lists.contains({'404','403'}, '__${status}__')}">
+        <strong>Es ist ein Fehler aufgetreten.</strong><span th:text="' Status: '+  ${status}">999</span>
+    </div>
+    <div>
+        <a href="#" th:href="@{~/}">Zurück zur Startseite</a>
+    </div>
+</div>
+</body>
+</html> 

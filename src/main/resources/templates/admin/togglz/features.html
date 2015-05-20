@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorator="root">
+<body>
+<div layout:fragment="content">
+    <div class="box">
+        <div class="box-header">
+            <div class="pull-left">
+                <h2>Feature Switch Configuration</h2>
+            </div>
+            <div class="pull-right" style="padding-top: 20px">
+                <a href="#" th:href="@{'/admin/togglz/edit'}" role="button" class="btn btn-primary">Add
+                    Feature Switch</a>
+            </div>
+        </div>
+        <div class="box-content clearfix">
+            <table class="table table-condensed">
+                <thead>
+                <tr>
+                    <td>Name (ID)</td>
+                    <td>Label</td>
+                    <td>EnabledByDefault</td>
+                    <td style="width: 100px">Actions</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="remoteFeature:${remoteFeatureList}">
+                  <td th:text="${remoteFeature.name}">Name</td>
+                  <td th:text="${remoteFeature.label}">Label</td>
+                  <td th:text="${remoteFeature.enabledByDefault}">FALSE</td>
+                  <td>
+                        <a href="#" th:href="@{'/admin/togglz/edit?name=' + ${remoteFeature.name}}"
+                           role="button" class="btn btn-xs btn-info">Edit</a>
+                        <a href="#" th:attr="data-href=@{'/admin/togglz/delete/' + ${remoteFeature.name}}"
+                           role="button" class="btn btn-xs btn-danger" data-toggle="modal"
+                           data-target="#confirm-delete">Delete</a>
+                  </td>
+                </tr>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+
+    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">Delete Feature Switch</div>
+                <div class="modal-body">Are you sure that you want to delete this feature switch?</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <a href="#" class="btn btn-danger danger">Delete!</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  <div class="modal fade" id="warning_on_start" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+       aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-warning">Attention</div>
+        <div class="modal-body">Changing test configurations here will affect all connected systems!</div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-warning" data-dismiss="modal">Ok</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script type="text/javascript" layout:fragment="scripts" th:inline="javascript">
+    $('#confirm-delete').on('show.bs.modal', function (e) {
+        $(this).find('.danger').attr('href', $(e.relatedTarget).data('href'));
+    });
+    $(document).ready(function() {
+      $('#warning_on_start').modal('show');
+    })
+</script>
+
+</body>
+</html>

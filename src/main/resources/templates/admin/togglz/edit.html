@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorator="root">
+<body>
+<div layout:fragment="content">
+    <div class="box">
+        <div class="box-header">
+            <h2 th:if="${#strings.isEmpty(remoteFeature.name)}">New Feature Switch</h2>
+            <h2 th:unless="${#strings.isEmpty(remoteFeature.name)}" th:text="'Edit Feature Switch: ' + ${remoteFeature.name}">Edit Feature Switch</h2>
+        </div>
+        <div class="box-content">
+            <form action="#" th:action="@{/admin/togglz/save}" th:object="${remoteFeature}" method="post">
+
+                <div class="form-group" name="name" th:errorclass="has-error">
+                    <label for="name">Name (ID)</label>
+                    <input type="text" class="form-control" th:field="*{name}" th:readonly="*{!#strings.isEmpty(name)}"/>
+
+                    <div class="help-block" th:each="err:${#fields.errors('name')}" th:text="${err}"/>
+                </div>
+
+                <table class="table table-condensed">
+                  <thead>
+                    <tr>
+                      <td>Label</td>
+                      <td>EnabledByDefault</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <div class="form-group" name="label" th:errorclass="has-error">
+                          <input type="text" class="form-control" th:field="*{label}"/>
+
+                          <div class="help-block" th:each="err:${#fields.errors('label')}" th:text="${err}"/>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="form-group" name="enabledByDefault" th:errorclass="has-error">
+                          <input type="checkbox" class="form-control" th:field="*{enabledByDefault}"/>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>           
+               
+                <div class="form-actions pull-right">
+                    <a th:href="@{/admin/togglz/}" class="btn btn-secondary">Cancel</a>
+                    <button class="btn btn-primary">Save</button>
+                </div>
+
+                <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">Delete Confirmation</div>
+                            <div class="modal-body">Are you sure that you want to delete feature switch?</div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                <button class="btn btn-danger" name="removeVariant">Delete!</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </form>
+        </div>
+    </div>
+    
+</div>
+
+<script type="text/javascript" layout:fragment="scripts" th:inline="javascript">
+    $('#confirm-delete').on('show.bs.modal', function (e) {
+        $(this).find('.btn-danger').attr('value', $(e.relatedTarget).data('row-index'));
+    });
+    
+</script>
+
+</body>
+</html>

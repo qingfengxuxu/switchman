@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorator="root">
+<body>
+
+<form th:fragment="configuration-exists" name="searchForm" th:action="@{update}" method="POST">
+    <input type="hidden" name="userSsoId" th:value="${decision.userSsoId}" />
+    <input type="hidden" name="testName" th:value="${decision.testName}" />
+    <td th:text="${decision.userSsoId}">12345</td>
+    <td th:text="${decision.testName}">Name</td>
+    <td th:text="${decision.variantId}">1</td>
+    <td th:text="${configurations[decision.testName].active} ? #{bool.true} : #{bool.false}"></td>
+    <td>
+        <span th:text="${#dates.format(configurations[decision.testName].from, 'dd MMMM yyyy HH:mm')}">01.01.2014 00:00</span>
+        <span> - </span>
+        <span th:text="${#dates.format(configurations[decision.testName].to, 'dd MMMM yyyy HH:mm')}">01.01.2014 00:00</span>
+    </td>
+    <td>
+        <div class="radio" th:each="variant : ${configurations[decision.testName].variants}">
+            <label>
+                <input type="radio" name="variantId" th:id="'variants' + ${variant.id}"
+                       th:value="${variant.id}"
+                       th:text="${variant.id} +' - ' + ${variant.description}">Variante X</input>
+            </label>
+        </div>
+    </td>
+    <td>
+        <button type="submit" class="btn btn-xs btn-primary">Set</button>
+        <a href="#"
+           th:attr="data-href=@{'/admin/decisions/delete/' + ${decision.userSsoId} + '/'+ ${decision.testName}}"
+           role="button" class="btn btn-xs btn-danger" data-toggle="modal"
+           data-target="#confirm-delete">Delete</a>
+
+    </td>
+</form>
+
+
+<form th:fragment="configuration-missing" name="searchForm" th:action="@{update}" method="POST">
+    <input type="hidden" name="userSsoId" th:value="${decision.userSsoId}" />
+    <input type="hidden" name="testName" th:value="${decision.testName}" />
+    <td th:text="${decision.userSsoId}">12345</td>
+    <td th:text="${decision.testName}">Name</td>
+    <td></td>
+    <td></td>
+    <td th:text="${decision.variantId}">1</td>
+    <td></td>
+    <td>
+        <a href="#"
+           th:attr="data-href=@{'/admin/decisions/delete/' + ${decision.userSsoId} + '/'+ ${decision.testName}}"
+           role="button" class="btn btn-xs btn-danger" data-toggle="modal"
+           data-target="#confirm-delete">Delete</a>
+
+    </td>
+</form>
+
+
+
+</body>
+</html>
