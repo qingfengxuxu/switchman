@@ -12,14 +12,20 @@
 
 A Microservice for storing A/B Test configurations and decisions as well as Feature Switch states.
 
-## Configuration
+HowTo Run the service
+---------------------
+To run this microservice, simply start a local mongodb and run the JAR as follows:
+```bash
+java -jar switchman-<VERSION>.jar -Dmongodb.url=mongodb://localhost:27017/switchman
+```
 
-* mongodb.url
+Configuration
+-------------
 
-Optional parameters:
-* hadoop.enabled
-* hadoop.rest.url
-* graphite.enabled
-* graphite.host
-* graphite.port
-* graphite.metrics.prefix
+| Parameter| Description | Optional |
+| ------------- |-------------|-------------|
+| mongodb.url     | formatted according to [MongoDB Connection String Documentation](http://docs.mongodb.org/manual/reference/connection-string/)| No |
+| graphite.enabled | Enable reporting of Spring Boot Metrics to Graphite | Yes |
+| graphite.host | Graphite host | Yes |
+| graphite.port | Graphite port | Yes |
+| graphite.metrics.prefix | Metrics prefix for Switchman | Yes |
