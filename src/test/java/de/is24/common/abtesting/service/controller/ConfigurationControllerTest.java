@@ -58,7 +58,7 @@ public class ConfigurationControllerTest {
   public void returnsEditPageWithConfiguration() {
     when(service.findByName(NAME)).thenReturn(configuration);
 
-    assertThat(controller.edit(NAME, model), equalTo("/admin/configuration/editConfiguration"));
+    assertThat(controller.edit(NAME, model), equalTo("admin/configuration/editConfiguration"));
     verify(service).findByName(NAME);
     verify(model).addAttribute(eq("abTestConfiguration"), same(configuration));
   }
@@ -80,7 +80,7 @@ public class ConfigurationControllerTest {
   @Test
   public void addsVariantAndContinueEditing() {
     assertThat(controller.addVariant(configuration, bindingResult, model),
-      equalTo("/admin/configuration/editConfiguration"));
+      equalTo("admin/configuration/editConfiguration"));
     verify(service).addVariant(configuration);
     verify(model).addAttribute(eq("abTestConfiguration"), same(configuration));
   }
@@ -88,7 +88,7 @@ public class ConfigurationControllerTest {
   @Test
   public void removesVariantAndContinueEditing() {
     assertThat(controller.removeVariant(configuration, bindingResult, REMOVE_VARIANT, model),
-      equalTo("/admin/configuration/editConfiguration"));
+      equalTo("admin/configuration/editConfiguration"));
     verify(service).removeVariant(configuration, REMOVE_VARIANT);
     verify(model).addAttribute(eq("abTestConfiguration"), same(configuration));
   }

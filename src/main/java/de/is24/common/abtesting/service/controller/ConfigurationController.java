@@ -111,7 +111,7 @@ public class ConfigurationController {
   private String editInternal(AbTestConfiguration configuration, Model model) {
     model.addAttribute("abTestConfiguration", (configuration != null) ? configuration : createNewConfiguration());
 
-    return "/admin/configuration/editConfiguration";
+    return "admin/configuration/editConfiguration";
   }
 
   private AbTestConfiguration createNewConfiguration() {

@@ -46,14 +46,14 @@ public class TogglzConfigurationController {
       feature = featureState.getFeature();
     }
     model.addAttribute(feature != null ? feature : new RemoteFeature());
-    return "/admin/togglz/edit";
+    return "admin/togglz/edit";
   }
 
   @RequestMapping(value = "/save", method = RequestMethod.POST)
   @Secured("ROLE_ADMIN")
   public String save(@Valid RemoteFeature featureSwitch, BindingResult bindingResult, Model model) {
     if (bindingResult.hasErrors()) {
-      return "/admin/togglz/edit";
+      return "admin/togglz/edit";
     }
 
     FeatureState state = featureStateRepository.findByFeatureName(featureSwitch.name());
