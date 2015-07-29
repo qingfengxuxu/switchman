@@ -5,6 +5,7 @@ import de.is24.common.abtesting.remote.api.AbTestVariant;
 import de.is24.common.abtesting.service.domain.AbTestConfiguration;
 import de.is24.common.abtesting.service.repo.AbTestConfigurationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -28,7 +29,7 @@ public class AbTestConfigurationService {
   }
 
   public Iterable<AbTestConfiguration> findByNamePrefix(final String prefix) {
-    return repository.findByNameStartsWith(prefix);
+    return repository.findByNameStartsWith(prefix, new PageRequest(0, 100));
   }
 
   public AbTestConfiguration save(AbTestConfiguration configuration) {

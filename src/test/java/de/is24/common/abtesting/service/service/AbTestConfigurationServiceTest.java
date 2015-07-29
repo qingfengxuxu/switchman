@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.Collections;
 import java.util.List;
@@ -16,6 +17,8 @@ import static com.google.common.collect.Lists.newArrayList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -64,9 +67,9 @@ public class AbTestConfigurationServiceTest {
   @Test
   public void delegatesFindByNamePrefixToRepository() {
     final List<AbTestConfiguration> abTestConfigurations = newArrayList(configuration);
-    when(repository.findByNameStartsWith(NAME)).thenReturn(abTestConfigurations);
+    when(repository.findByNameStartsWith(eq(NAME), any(PageRequest.class))).thenReturn(abTestConfigurations);
     assertThat(service.findByNamePrefix(NAME), IsSame.sameInstance(abTestConfigurations));
-    verify(repository).findByNameStartsWith(NAME);
+    verify(repository).findByNameStartsWith(eq(NAME), any(PageRequest.class));
   }
 
   @Test
