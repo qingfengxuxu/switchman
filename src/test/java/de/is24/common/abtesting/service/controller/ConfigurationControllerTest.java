@@ -10,7 +10,9 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+
 import java.util.Optional;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.mockito.Matchers.any;
@@ -44,7 +46,6 @@ public class ConfigurationControllerTest {
     configuration = new AbTestConfiguration();
   }
 
-
   @Test
   public void returnsIndexPageWithAllConfigurations() {
     assertThat(controller.index(model), equalTo("admin/configuration/configurations"));
@@ -53,7 +54,15 @@ public class ConfigurationControllerTest {
     verify(model).addAttribute(eq("counters"), anyMapOf(String.class, Long.class));
   }
 
-
+  @Test
+  public void returnsIndexPageWhenFiltering() {
+    final String prefix = "prefix";
+    assertThat(controller.filterByPrefix(prefix, model), equalTo("admin/configuration/configurations"));
+    verify(service).findByNamePrefix(prefix);
+    verify(model).addAttribute(eq("configurations"), anyCollectionOf(AbTestConfiguration.class));
+    verify(model).addAttribute(eq("counters"), anyMapOf(String.class, Long.class));
+  }
+  
   @Test
   public void returnsEditPageWithConfiguration() {
     when(service.findByName(NAME)).thenReturn(configuration);

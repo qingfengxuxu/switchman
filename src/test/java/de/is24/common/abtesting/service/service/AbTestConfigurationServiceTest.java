@@ -8,8 +8,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
 import java.util.Collections;
 import java.util.List;
+
+import static com.google.common.collect.Lists.newArrayList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -54,9 +57,16 @@ public class AbTestConfigurationServiceTest {
 
   @Test
   public void delegatesFindByNameToRepository() {
-    List<AbTestConfiguration> abTestConfigurations = Collections.<AbTestConfiguration>emptyList();
     when(repository.findByName(NAME)).thenReturn(configuration);
     assertThat(service.findByName(NAME), IsSame.<AbTestConfiguration>sameInstance(configuration));
+  }
+
+  @Test
+  public void delegatesFindByNamePrefixToRepository() {
+    final List<AbTestConfiguration> abTestConfigurations = newArrayList(configuration);
+    when(repository.findByNameStartsWith(NAME)).thenReturn(abTestConfigurations);
+    assertThat(service.findByNamePrefix(NAME), IsSame.sameInstance(abTestConfigurations));
+    verify(repository).findByNameStartsWith(NAME);
   }
 
   @Test

@@ -9,10 +9,12 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
 import javax.validation.Valid;
 import java.util.Collections;
 import java.util.List;
@@ -32,27 +34,18 @@ public class ConfigurationController {
     this.abTestDecisionService = abTestDecisionService;
   }
 
-  @RequestMapping("/")
+  @RequestMapping("")
   @Secured("ROLE_USER")
   public String index(Model model) {
     Iterable<AbTestConfiguration> allConfigurations = abTestConfigurationService.findAll();
-    model.addAttribute("configurations", allConfigurations);
-    model.addAttribute("counters", abTestDecisionService.countDecisionsForConfigurations());
-    model.addAttribute("lastCreated", abTestDecisionService.latestDecisionForConfigurations());
-    model.addAttribute("orphans", 
-      abTestDecisionService.findOrphans(toTestNames(allConfigurations)));
-
-    return "admin/configuration/configurations";
+    return getOverviewModelAndView(model, allConfigurations);
   }
 
-  private List<String> toTestNames(Iterable<AbTestConfiguration> allConfigurations) {
-    if (allConfigurations == null) {
-      return Collections.emptyList();
-    }
-    return Lists.newArrayList(allConfigurations)
-      .stream()
-      .map(c -> c.getName())
-      .collect(Collectors.toList());
+  @RequestMapping("/filter")
+  @Secured("ROLE_USER")
+  public String filterByPrefix(@ModelAttribute(value = "prefix") final String prefix, final Model model) {
+    Iterable<AbTestConfiguration> configurations = abTestConfigurationService.findByNamePrefix(prefix);
+    return getOverviewModelAndView(model, configurations);
   }
 
   @RequestMapping("/edit")
@@ -107,6 +100,24 @@ public class ConfigurationController {
     return "redirect:/admin/configurations/";
   }
 
+  private String getOverviewModelAndView(final Model model, final Iterable<AbTestConfiguration> configurations) {
+    model.addAttribute("configurations", configurations);
+    model.addAttribute("counters", abTestDecisionService.countDecisionsForConfigurations());
+    model.addAttribute("lastCreated", abTestDecisionService.latestDecisionForConfigurations());
+    model.addAttribute("orphans", abTestDecisionService.findOrphans(toTestNames(configurations)));
+
+    return "admin/configuration/configurations";
+  }
+
+  private List<String> toTestNames(Iterable<AbTestConfiguration> allConfigurations) {
+    if (allConfigurations == null) {
+      return Collections.emptyList();
+    }
+    return Lists.newArrayList(allConfigurations)
+        .stream()
+        .map(AbTestConfiguration::getName)
+        .collect(Collectors.toList());
+  }
 
   private String editInternal(AbTestConfiguration configuration, Model model) {
     model.addAttribute("abTestConfiguration", (configuration != null) ? configuration : createNewConfiguration());

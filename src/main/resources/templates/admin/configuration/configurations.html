@@ -1,109 +1,124 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" 
+<html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org"
       layout:decorator="root">
 <body>
 <div layout:fragment="content">
-    <div class="box">
-        <div class="box-header">
-            <div class="pull-left">
-                <h2>A/B Test Configuration</h2>
-            </div>
-            <div class="pull-right" style="padding-top: 20px">
-                <a href="#" th:href="@{'/admin/configurations/edit'}" role="button" class="btn btn-primary">Add
-                    Configuration</a>
-            </div>
-        </div>
-        <div class="box-content clearfix">
-            <table class="table table-condensed">
-                <thead>
-                <tr>
-                  <td>Name (ID)</td>
-                  <td style="width: 60px;">Usages</td>
-                  <td>Latest decision</td>
-                  <td>Valid from</td>
-                  <td>Valid to</td>
-                  <td>Storage</td>
-                  <td>Variants</td>
-                  <td style="width: 100px">Actions</td>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="configuration:${configurations}">
-                  <td th:text="${configuration.name}">Name</td>
-                  <td><span class="badge" th:text="${counters[configuration.name]}?: 0">734</span></td>
-                  <td th:text="${lastCreated[configuration.name] != null ? #dates.format(lastCreated[configuration.name], 'dd MMMM yyyy HH:mm'): 'unused'}">21.01.2014 23:59</td>
-                  <td th:text="${#dates.format(configuration.from, 'dd MMMM yyyy HH:mm')}">01.01.2014 00:00</td>
-                  <td th:text="${#dates.format(configuration.to, 'dd MMMM yyyy HH:mm')}">21.01.2014 23:59</td>
-                  <td th:text="${configuration.abTestStorageType != null ? configuration.abTestStorageType : 'DB'}">DB</td>
-                  <td>
-                        <div th:each="variant:${configuration.variants}">
-                            <span th:text="${variant.description}">Variante X</span>
-                            <small th:text="' (Id: '  +${variant.id} + ' Gewicht: ' + ${variant.weight} + ')'">50
-                            </small>
-                        </div>
-                    </td>
-                  <td>
-                    <a href="#" th:href="@{'/admin/configurations/edit?name=' + ${configuration.name}}"
-                       role="button" class="btn btn-xs btn-info">Edit</a>
-                    <a href="#" th:attr="data-href=@{'/admin/configurations/delete/' + ${configuration.name}}"
-                       role="button" class="btn btn-xs btn-danger" data-toggle="modal"
-                       data-target="#confirm-delete">Delete</a>
-                  </td>
-                </tr>
-                <tr class="warning" th:each="orphan:${orphans}">
-                  <td><del th:text="${orphan.testName}">Name</del></td>
-                  <td><span class="badge" th:text="${orphan.count}">734</span></td>
-                  <td th:text="${#dates.format(orphan.latestCreatedDate, 'dd MMMM yyyy HH:mm')}">01.01.2014 00:00</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td>
-                    <a href="#" th:attr="data-href=@{'/admin/configurations/delete-orphan/' + ${orphan.testName}},data-title=${orphan.testName}"
-                       role="button" class="btn btn-xs btn-danger" data-toggle="modal"
-                       data-target="#confirm-delete-orphan">Delete</a>
-                  </td>
-                </tr>
-                
-                </tbody>
-              </table>
-        </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h2>A/B Test Configuration</h2>
     </div>
+    <div class="panel-body">
+      <div class="pull-right">
+        <a href="#" th:href="@{'/admin/configurations/edit'}" role="button" class="btn btn-primary">Add
+          Configuration</a>
+      </div>
+      <div class="pull-left">
+        <form action="#" th:action="@{/admin/configurations/filter}" method="get" class="form-inline">
+          <div class="form-group" name="prefix">
+            <label for="prefix">Filter configurations by prefix</label>
+            <input type="text" class="form-control" th:value="${prefix}" id="prefix" name="prefix"/>
+            <button class="btn btn-primary">Filter</button>
+          </div>
+        </form>
+      </div>
+      <div class="clearfix"></div>
+      <hr/>
+      <table class="table table-condensed">
+        <thead>
+        <tr>
+          <td>Name (ID)</td>
+          <td style="width: 60px;">Usages</td>
+          <td>Latest decision</td>
+          <td>Valid from</td>
+          <td>Valid to</td>
+          <td>Storage</td>
+          <td>Variants</td>
+          <td style="width: 100px">Actions</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="configuration:${configurations}">
+          <td th:text="${configuration.name}">Name</td>
+          <td><span class="badge" th:text="${counters[configuration.name]}?: 0">734</span></td>
+          <td th:text="${lastCreated[configuration.name] != null ? #dates.format(lastCreated[configuration.name], 'dd MMMM yyyy HH:mm'): 'unused'}">
+            21.01.2014 23:59
+          </td>
+          <td th:text="${#dates.format(configuration.from, 'dd MMMM yyyy HH:mm')}">01.01.2014 00:00</td>
+          <td th:text="${#dates.format(configuration.to, 'dd MMMM yyyy HH:mm')}">21.01.2014 23:59</td>
+          <td th:text="${configuration.abTestStorageType != null ? configuration.abTestStorageType : 'DB'}">DB</td>
+          <td>
+            <div th:each="variant:${configuration.variants}">
+              <span th:text="${variant.description}">Variante X</span>
+              <small th:text="' (Id: '  +${variant.id} + ' Gewicht: ' + ${variant.weight} + ')'">50
+              </small>
+            </div>
+          </td>
+          <td>
+            <a href="#" th:href="@{'/admin/configurations/edit?name=' + ${configuration.name}}"
+               role="button" class="btn btn-xs btn-info">Edit</a>
+            <a href="#" th:attr="data-href=@{'/admin/configurations/delete/' + ${configuration.name}}"
+               role="button" class="btn btn-xs btn-danger" data-toggle="modal"
+               data-target="#confirm-delete">Delete</a>
+          </td>
+        </tr>
+        <tr class="warning" th:each="orphan:${orphans}">
+          <td>
+            <del th:text="${orphan.testName}">Name</del>
+          </td>
+          <td><span class="badge" th:text="${orphan.count}">734</span></td>
+          <td th:text="${#dates.format(orphan.latestCreatedDate, 'dd MMMM yyyy HH:mm')}">01.01.2014 00:00</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>
+            <a href="#"
+               th:attr="data-href=@{'/admin/configurations/delete-orphan/' + ${orphan.testName}},data-title=${orphan.testName}"
+               role="button" class="btn btn-xs btn-danger" data-toggle="modal"
+               data-target="#confirm-delete-orphan">Delete</a>
+          </td>
+        </tr>
 
-    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">Delete Confirmation</div>
-                <div class="modal-body">
-                  <p>Are you sure that you want to delete the test configuration?</p>
-                  <input type="checkbox" id="deleteDecisions"  checked="true"/>
-                  <label for="deleteDecisions">remove related decisions</label>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <a href="#" class="btn btn-danger danger">Delete!</a>
-                </div>
-            </div>
-        </div>
+        </tbody>
+      </table>
     </div>
-  
+  </div>
+
+  <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+       aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">Delete Confirmation</div>
+        <div class="modal-body">
+          <p>Are you sure that you want to delete the test configuration?</p>
+          <input type="checkbox" id="deleteDecisions" checked="true"/>
+          <label for="deleteDecisions">remove related decisions</label>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <a href="#" class="btn btn-danger danger">Delete!</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="modal fade" id="confirm-delete-orphan" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">Delete Confirmation</div>
-                <div class="modal-body">
-                  <p>Are you sure that you want to delete the test decisions of the non-existing configuration: <span id="orphanTitle">TEST_NAME</span>&nbsp;?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <a href="#" class="btn btn-danger danger">Delete!</a>
-                </div>
-            </div>
+       aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">Delete Confirmation</div>
+        <div class="modal-body">
+          <p>Are you sure that you want to delete the test decisions of the non-existing configuration: <span
+              id="orphanTitle">TEST_NAME</span>&nbsp;?</p>
         </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <a href="#" class="btn btn-danger danger">Delete!</a>
+        </div>
+      </div>
     </div>
+  </div>
 
   <div class="modal fade" id="warning_on_start" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
        aria-hidden="true">
@@ -111,7 +126,7 @@
       <div class="modal-content">
         <div class="modal-header bg-warning">Attention</div>
         <div class="modal-body">
-            <p>Changing test configurations here will affect all connected systems!</p>
+          <p>Changing test configurations here will affect all connected systems!</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-warning" data-dismiss="modal">Ok</button>
@@ -123,25 +138,25 @@
 </div>
 
 <script type="text/javascript" layout:fragment="scripts" th:inline="javascript">
-    $('#confirm-delete').on('show.bs.modal', function (e) {
-      $(this).find('.danger').attr('data-href', $(e.relatedTarget).attr('data-href'));
-      updateDeleteLink();
-    });
-    $('#deleteDecisions').on('click', updateDeleteLink);
-    
-    function updateDeleteLink() {
-      var deleteLink = $('#confirm-delete').find('.danger');
-      deleteLink.attr('href', deleteLink.attr('data-href') + '?deleteDecisions=' + $('#deleteDecisions').prop('checked'));
-    }
+  $('#confirm-delete').on('show.bs.modal', function (e) {
+    $(this).find('.danger').attr('data-href', $(e.relatedTarget).attr('data-href'));
+    updateDeleteLink();
+  });
+  $('#deleteDecisions').on('click', updateDeleteLink);
 
-    $('#confirm-delete-orphan').on('show.bs.modal', function (e) {
-      $(this).find('.danger').attr('href', $(e.relatedTarget).attr('data-href'));
-      $(this).find('#orphanTitle').text($(e.relatedTarget).attr('data-title'));
-    });
-    
-    $(document).ready(function() {
-      $('#warning_on_start').modal('show');
-    })
+  function updateDeleteLink() {
+    var deleteLink = $('#confirm-delete').find('.danger');
+    deleteLink.attr('href', deleteLink.attr('data-href') + '?deleteDecisions=' + $('#deleteDecisions').prop('checked'));
+  }
+
+  $('#confirm-delete-orphan').on('show.bs.modal', function (e) {
+    $(this).find('.danger').attr('href', $(e.relatedTarget).attr('data-href'));
+    $(this).find('#orphanTitle').text($(e.relatedTarget).attr('data-title'));
+  });
+
+  $(document).ready(function () {
+    $('#warning_on_start').modal('show');
+  })
 </script>
 
 </body>

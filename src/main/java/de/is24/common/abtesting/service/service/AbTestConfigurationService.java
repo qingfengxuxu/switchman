@@ -1,11 +1,12 @@
 package de.is24.common.abtesting.service.service;
 
 import com.google.common.collect.Maps;
-import de.is24.common.abtesting.service.domain.AbTestConfiguration;
 import de.is24.common.abtesting.remote.api.AbTestVariant;
+import de.is24.common.abtesting.service.domain.AbTestConfiguration;
 import de.is24.common.abtesting.service.repo.AbTestConfigurationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.Map;
 
 
@@ -24,6 +25,10 @@ public class AbTestConfigurationService {
 
   public AbTestConfiguration findByName(String name) {
     return repository.findByName(name);
+  }
+
+  public Iterable<AbTestConfiguration> findByNamePrefix(final String prefix) {
+    return repository.findByNameStartsWith(prefix);
   }
 
   public AbTestConfiguration save(AbTestConfiguration configuration) {
