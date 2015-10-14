@@ -40,5 +40,6 @@ public class RestMvc extends RepositoryRestMvcConfiguration {
     config.setBaseUri(URI.create(config.getBaseUri().getPath() + "/api"));
     config.exposeIdsFor(AbTestConfiguration.class);
     config.exposeIdsFor(AbTestVariant.class);
+    config.setDefaultPageSize(1000);
   }
 }
