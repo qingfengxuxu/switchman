@@ -9,6 +9,7 @@
 ```
 [![Build Status](https://api.travis-ci.org/ImmobilienScout24/switchman.svg?branch=master)](https://travis-ci.org/ImmobilienScout24/switchman)
 [![Coverage Status](https://coveralls.io/repos/ImmobilienScout24/switchman/badge.svg)](https://coveralls.io/r/ImmobilienScout24/switchman)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.is24.common/switchman/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.is24.common/switchman/)
 
 A Microservice for storing A/B Test configurations and decisions as well as Feature Switch states.
 
